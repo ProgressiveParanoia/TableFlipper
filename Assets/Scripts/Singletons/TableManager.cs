@@ -13,12 +13,13 @@ namespace ShadowMonsters.Tables
 
         private TableBehaviour activeTable;
 
-        public event Action<string> HighlightObject;
-        public event Action<string> ClearHighlights;
+        public event Action<TableBehaviour> HighlightObject;
+        public event Action<TableBehaviour> ClearHighlights;
 
         public TableSpawnManager TableSpawnManager { get { return tableSpawnManager; } }
         #endregion
 
+        #region implementation of AGameManager
         public override void Setup()
         {
             MonoUtility.Instance.StartCoroutine(SetupRoutine());
@@ -28,6 +29,8 @@ namespace ShadowMonsters.Tables
         {
             yield return null;
         }
+        #endregion
+
         #region Mono
         private void Awake()
         {
@@ -58,10 +61,10 @@ namespace ShadowMonsters.Tables
             if (this.activeTable == null)
             {
                 this.activeTable = activeTable;
-                string instanceID = this.activeTable.GetInstanceID().ToString();
+//                string instanceID = this.activeTable.GetInstanceID().ToString();
 
                 if (HighlightObject != null)
-                    HighlightObject(instanceID);
+                    HighlightObject(this.activeTable);
             }
         }
         
@@ -69,9 +72,9 @@ namespace ShadowMonsters.Tables
         {
             if(this.activeTable != null)
             {
-                string instanceID = this.activeTable.GetInstanceID().ToString();
+                //string instanceID = this.activeTable.GetInstanceID().ToString();
                 if (ClearHighlights != null)
-                    ClearHighlights(instanceID);
+                    ClearHighlights(this.activeTable);
 
                 this.activeTable = null;
 
