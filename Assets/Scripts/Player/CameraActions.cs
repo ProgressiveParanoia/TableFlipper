@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ShadowMonsters.Tables;
+using UnityEngine.EventSystems;
 
 public class CameraActions : MonoBehaviour {
 
     #region fields and properties
     private TableManager tableManager;
+    private PlayerManager playerManager;
 
     [SerializeField]
     private float tableRayDistance;
@@ -22,30 +24,46 @@ public class CameraActions : MonoBehaviour {
     private void Start()
     {
         this.tableManager = TableManager.Instance;
-    }
-    #endregion
+        this.playerManager = PlayerManager.Instance;
 
+        EventTrigger.Entry flip = new EventTrigger.Entry();
+        flip.eventID = EventTriggerType.PointerDown;
+        flip.callback.AddListener((data) => { OnFlipPressed(data as PointerEventData); });
+
+        this.playerManager.PlayerControlsOverlay.FlipButtonTrigger.triggers.Add(flip);
+      //  this.playerManager.PlayerControlsOverlay.FlipButtonEvent.AddListener(this.OnFlipPressed);
+    }
+
+    private void OnDestroy()
+    {
+
+    }
+   
     void Update ()
     {
         this.CheckFront();
     }
 
+    #endregion
+
+    #region UIPlayerController Events Listeners
+    
+    private void OnFlipPressed(PointerEventData data)
+    {
+        if (tableManager.ActiveTable == null)
+        {
+            return;
+        }
+
+        Rigidbody activeRigid = tableManager.ActiveTable.GetComponent<Rigidbody>();
+        activeRigid.AddForce(transform.forward * exertedForce); 
+    }
+
+    #endregion
+
     private void CheckFront()
     {
         this.RayCastObjects();
-
-        if (/*this.hittingTable &&*/ tableManager.ActiveTable != null)
-        {
-            Rigidbody activeRigid = tableManager.ActiveTable.GetComponent<Rigidbody>();
-
-            #if UNITY_EDITOR || UNITY_STANDALONE_WIN
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    activeRigid.AddForce(transform.forward * exertedForce);
-               
-                }
-            #endif
-        }
     }
     private void RayCastObjects()
     {
