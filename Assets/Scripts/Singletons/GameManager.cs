@@ -16,14 +16,15 @@ public class GameManager : AGameManager {
     public override void Setup()
     {
         MonoUtility.Instance.StartCoroutine(SetupRoutine());
-		Debug.LogError("Push me baby pls");
 	}
 
     protected override IEnumerator SetupRoutine()
     {
         foreach (AGameManager manager in ingameMangers)
         {
+            manager.Setup();
             GameObject gameManager = GameObject.Instantiate(manager.gameObject);
+            
             yield return gameManager;
         }
     }

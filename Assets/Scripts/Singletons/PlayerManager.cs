@@ -2,16 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ShadowMonsters.Utilities;
+using System;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : AGameManager {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    #region fields and properties
+    
+    #endregion
+
+    #region Singleton implementation
+    private static PlayerManager instance;
+
+    public static PlayerManager Instance
+    {
+        get { return instance; }
+    }
+    #endregion
+
+    #region AGameManager implementation
+    public override void Setup()
+    {
+        MonoUtility.Instance.StartCoroutine(SetupRoutine());
+    }
+
+    protected override IEnumerator SetupRoutine()
+    {
+        Vector3 playerSpawnPosition = GameObject.Find("PlayerSpawn").transform.position;
+        GameObject p = GameObject.Instantiate(Resources.Load(IngameFileList.INGAME_PLAYER_PREFAB_PLACEHOLDER_PATH)) as GameObject;
+        p.transform.position = playerSpawnPosition;
+        Debug.LogError("Setup player manager");
+        yield return null;
+    }
+
+    #endregion
+
+    #region Mono
+    private void Awake()
+    {
+        instance = this.GetComponent<PlayerManager>();
+    }
+#endregion
 }
