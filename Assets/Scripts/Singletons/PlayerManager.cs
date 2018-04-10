@@ -7,7 +7,12 @@ using System;
 public class PlayerManager : AGameManager {
 
     #region fields and properties
+    private UIPlayerController playerControlsOverlay;
     
+    public UIPlayerController PlayerControlsOverlay
+    {
+        get { return this.playerControlsOverlay; }
+    }
     #endregion
 
     #region Singleton implementation
@@ -30,16 +35,20 @@ public class PlayerManager : AGameManager {
         Vector3 playerSpawnPosition = GameObject.Find("PlayerSpawn").transform.position;
         GameObject p = GameObject.Instantiate(Resources.Load(IngameFileList.INGAME_PLAYER_PREFAB_PLACEHOLDER_PATH)) as GameObject;
         p.transform.position = playerSpawnPosition;
-        Debug.LogError("Setup player manager");
         yield return null;
+
     }
 
     #endregion
 
+    
     #region Mono
     private void Awake()
     {
         instance = this.GetComponent<PlayerManager>();
+        this.playerControlsOverlay = FindObjectOfType<UIPlayerController>();
+
+        this.playerControlsOverlay.Setup();
     }
 #endregion
 }
