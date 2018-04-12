@@ -20,6 +20,9 @@ namespace ShadowMonsters.Tables
         private Coroutine defaultTableHiglightRoutine;
         private Coroutine tableHiglightRoutine;
 
+        //TODO: Use TableData 
+        private bool isHighlighted;
+
         #region Mono
         private void Start()
         {
@@ -45,7 +48,7 @@ namespace ShadowMonsters.Tables
 
         private void OnResetHighlightObject(TableBehaviour activeTable)
         {
-           if(tableParent == activeTable)
+           if(tableParent == activeTable /*|| isHighlighted*/)
             this.StartSetDefaultHighlightTable();
         }
         #endregion
@@ -77,6 +80,8 @@ namespace ShadowMonsters.Tables
                 yield return null;
             }
             this.tableHiglightRoutine = null;
+
+            isHighlighted = true;
         }
 
         private IEnumerator SetDefaultHighlightTableCoroutine()
@@ -87,6 +92,7 @@ namespace ShadowMonsters.Tables
                 yield return null;
             }
             this.defaultTableHiglightRoutine = null;
+            isHighlighted = false;
         }
     }
 }
