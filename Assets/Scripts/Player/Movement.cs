@@ -174,10 +174,12 @@ public class Movement : MonoBehaviour
 
     void rotate()
     {
+        #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         playerRotX += Input.GetAxis("Mouse Y") * 1f;
-        playerRotX = Mathf.Clamp(playerRotX, -80,80);
-
+        
         playerRotY += Input.GetAxis("Mouse X") * 1f;
+        #endif
+        playerRotX = Mathf.Clamp(playerRotX, -80, 80);
 
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, playerRotY, transform.localEulerAngles.z);
         playerCamera.localEulerAngles = new Vector3(-(playerRotX), playerCamera.localEulerAngles.y, playerCamera.localEulerAngles.z);
