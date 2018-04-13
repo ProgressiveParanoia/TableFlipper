@@ -7,6 +7,8 @@ namespace ShadowMonsters.Tables
 {
     public class TableMeshBehavior : MonoBehaviour
     {
+        //TODO: create a unique identifier for table behaviour
+        private TableBehaviour tableParent;
         [SerializeField]
         private Material defaultMat;
         [SerializeField]
@@ -18,11 +20,16 @@ namespace ShadowMonsters.Tables
         private Coroutine defaultTableHiglightRoutine;
         private Coroutine tableHiglightRoutine;
 
+        //TODO: Use TableData 
+        private bool isHighlighted;
+
         #region Mono
         private void Start()
         {
             TableManager.Instance.HighlightObject += OnHighlightObject;
             TableManager.Instance.ClearHighlights += OnResetHighlightObject;
+
+            tableParent = GetComponentInParent<TableBehaviour>() != null ? GetComponentInParent<TableBehaviour>() : null;
         }
 
         private void OnDestroy()
@@ -33,14 +40,15 @@ namespace ShadowMonsters.Tables
         #endregion
 
         #region Event Listeners
-        private void OnHighlightObject(string gameID)
+        private void OnHighlightObject(TableBehaviour activeTable)
         {
-            
+            if(tableParent == activeTable)
             this.StartHighlightTable();
         }
 
-        private void OnResetHighlightObject(string gameID)
+        private void OnResetHighlightObject(TableBehaviour activeTable)
         {
+           if(tableParent == activeTable /*|| isHighlighted*/)
             this.StartSetDefaultHighlightTable();
         }
         #endregion
@@ -72,6 +80,8 @@ namespace ShadowMonsters.Tables
                 yield return null;
             }
             this.tableHiglightRoutine = null;
+
+            isHighlighted = true;
         }
 
         private IEnumerator SetDefaultHighlightTableCoroutine()
@@ -82,6 +92,7 @@ namespace ShadowMonsters.Tables
                 yield return null;
             }
             this.defaultTableHiglightRoutine = null;
+            isHighlighted = false;
         }
     }
 }

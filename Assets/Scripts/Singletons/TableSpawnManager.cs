@@ -8,8 +8,6 @@ namespace ShadowMonsters.Tables
     public class TableSpawnManager : ASubGameManager
     {
         #region fields and properties
-        private const string tablePrefabName = "Prefabs/Ingame/Table/Table_Flip";
-
         private Transform moveableObjectsParent;
         private Transform tableSpawnCollectionParent;
 
@@ -37,12 +35,12 @@ namespace ShadowMonsters.Tables
             foreach (TableSpawnObject spawn in tableSpawnCollection)
             {
                 spawn.Setup();
-                GameObject t = GameObject.Instantiate(Resources.Load(tablePrefabName) as GameObject);
+                string filePath = IngameFileList.INGAME_TABLE_PREFAB_PATH;
+                GameObject t = GameObject.Instantiate(Resources.Load(filePath) as GameObject);
                 TableBehaviour table = t.GetComponent<TableBehaviour>();
                 table.transform.position = spawn.GetWorldPosition;
                 tableCollection.Add(table);
 
-                
                 yield return null;
             }
 
@@ -52,3 +50,4 @@ namespace ShadowMonsters.Tables
 #endregion
     }
 }
+        
