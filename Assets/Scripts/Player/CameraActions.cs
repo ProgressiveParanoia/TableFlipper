@@ -26,11 +26,11 @@ public class CameraActions : MonoBehaviour {
         this.tableManager = TableManager.Instance;
         this.playerManager = PlayerManager.Instance;
 
-        EventTrigger.Entry flip = new EventTrigger.Entry();
-        flip.eventID = EventTriggerType.PointerDown;
-        flip.callback.AddListener((data) => { OnFlipPressed(data as PointerEventData); });
+        //EventTrigger.Entry flip = new EventTrigger.Entry();
+        //flip.eventID = EventTriggerType.PointerDown;
+        //flip.callback.AddListener((data) => { OnFlipPressed(data as PointerEventData); });
 
-        this.playerManager.PlayerControlsOverlay.FlipButtonTrigger.triggers.Add(flip);
+        //this.playerManager.PlayerControlsOverlay.FlipButtonTrigger.triggers.Add(flip);
       //  this.playerManager.PlayerControlsOverlay.FlipButtonEvent.AddListener(this.OnFlipPressed);
     }
 
