@@ -6,15 +6,6 @@ using System;
 
 public class PlayerManager : AGameManager {
 
-    #region fields and properties
-    private UIPlayerController playerControlsOverlay;
-    
-    public UIPlayerController PlayerControlsOverlay
-    {
-        get { return this.playerControlsOverlay; }
-    }
-    #endregion
-
     #region Singleton implementation
     private static PlayerManager instance;
 
@@ -46,9 +37,6 @@ public class PlayerManager : AGameManager {
     private void Awake()
     {
         instance = this.GetComponent<PlayerManager>();
-        this.playerControlsOverlay = FindObjectOfType<UIPlayerController>();
-
-        this.playerControlsOverlay.Setup();
     }
 #endregion
 }

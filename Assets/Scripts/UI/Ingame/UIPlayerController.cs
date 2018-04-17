@@ -1,26 +1,47 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class UIPlayerController : MonoBehaviour
 {
+
     #region fields and properties
-   
-    public EventTrigger FlipButtonTrigger;
-    public EventTrigger ForwardButtonTrigger;
-    public EventTrigger BackwardButtonTrigger;
-    public EventTrigger LeftButtonTrigger;
-    public EventTrigger RightButtonTrigger;
-  
+    [SerializeField]
+    private EventTrigger FlipButtonTrigger;
+    [SerializeField]
+    private EventTrigger ForwardButtonTrigger;
+    [SerializeField]
+    private EventTrigger BackwardButtonTrigger;
+    [SerializeField]
+    private EventTrigger LeftButtonTrigger;
+    [SerializeField]
+    private EventTrigger RightButtonTrigger;
+
+    public event Action MoveForward;
+    public event Action MoveBackward;
+    public event Action MoveRight;
+    public event Action MoveLeft;
+
+    public event Action MoveVerticalKeysUp;
+    public event Action MoveHorizontalKeysUp;
     #endregion
 
-    public void Setup()
+    #region singleton implementation
+    private static UIPlayerController instance;
+    public static UIPlayerController Instance
     {
-     
+        get { return instance; }
     }
+    #endregion
 
     #region Mono
+
+    private void Awake()
+    {
+        instance = this.GetComponent<UIPlayerController>();
+    }
 
     private void Update()
     {
@@ -34,5 +55,55 @@ public class UIPlayerController : MonoBehaviour
         #endif
     }
     #endregion
+
+    #region Event Callbacks
+    public void OnMoveForwardPressed()
+    {
+        if(this.MoveForward != null)
+        {
+            this.MoveForward();
+        }
+    }
     
+    public void OnMoveBackPressed()
+    {
+        if(this.MoveBackward != null)
+        {
+            this.MoveBackward();
+        }
+    }
+
+    public void OnMoveLeftPressed()
+    {
+        if(this.MoveLeft != null)
+        {
+            this.MoveLeft();
+        }
+    }
+
+    public void OnMoveRightPressed()
+    {
+        if(this.MoveRight != null)
+        {
+            this.MoveRight();
+        }
+    }
+
+    public void OnVerticalKeysUp()
+    {
+        if(this.MoveVerticalKeysUp != null)
+        {
+            this.MoveVerticalKeysUp();
+        }
+    }
+
+    public void OnHorizontalKeysUp()
+    {
+        if(this.MoveHorizontalKeysUp != null)
+        {
+            this.MoveHorizontalKeysUp();
+        }
+    }
+    #endregion
+
 }

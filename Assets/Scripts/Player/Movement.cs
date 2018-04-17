@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class Movement : MonoBehaviour
 {
     #region Fields and Properties
+
     [SerializeField]
     private Transform playerCamera;
     [SerializeField]
@@ -38,61 +39,35 @@ public class Movement : MonoBehaviour
 
     #endregion
 
-        #region Mono
-    private void Start ()
+    #region Mono
+    private void Awake()
     {
         playerCont = GetComponent<CharacterController>();
         playerCont.detectCollisions = false;
+    }
 
-        EventTrigger.Entry fwd = new EventTrigger.Entry();
-        EventTrigger.Entry fwdUp = new EventTrigger.Entry();
+    private void Start ()
+    {
+        UIPlayerController.Instance.MoveForward += this.OnForwardPressed;
+        UIPlayerController.Instance.MoveBackward += this.OnBackwardPressed;
+        UIPlayerController.Instance.MoveRight += this.OnRightPressed;
+        UIPlayerController.Instance.MoveLeft += this.OnLeftPressed;
 
-        EventTrigger.Entry bkwd = new EventTrigger.Entry();
-        EventTrigger.Entry bkwdUp = new EventTrigger.Entry();
-
-        EventTrigger.Entry left = new EventTrigger.Entry();
-        EventTrigger.Entry leftUp = new EventTrigger.Entry();
-
-        EventTrigger.Entry right = new EventTrigger.Entry();
-        EventTrigger.Entry rightUp = new EventTrigger.Entry();
-
-        fwd.eventID = EventTriggerType.PointerDown;
-        fwdUp.eventID = EventTriggerType.PointerUp;
-
-        bkwd.eventID = EventTriggerType.PointerDown;
-        bkwdUp.eventID = EventTriggerType.PointerUp;
-
-        left.eventID = EventTriggerType.PointerDown;
-        leftUp.eventID = EventTriggerType.PointerUp;
-
-        right.eventID = EventTriggerType.PointerDown;
-        rightUp.eventID = EventTriggerType.PointerUp;
-
-        fwd.callback.AddListener((data) => { OnForwardPressed(data as PointerEventData); });
-        fwdUp.callback.AddListener((data) => { OnVerticalKeysNotPressed(data as PointerEventData); });
-
-        bkwd.callback.AddListener((data) => { OnBackwardPressed(data as PointerEventData); });
-        bkwdUp.callback.AddListener((data) => { OnVerticalKeysNotPressed(data as PointerEventData); });
-
-        left.callback.AddListener((data) => { OnLeftPressed(data as PointerEventData); });
-        leftUp.callback.AddListener((data) => { OnHorizontalKeysNotPressed(data as PointerEventData); });
-
-        right.callback.AddListener((data) => { OnRightPressed(data as PointerEventData); });
-        rightUp.callback.AddListener((data) => { OnHorizontalKeysNotPressed(data as PointerEventData); });
-
-        PlayerManager.Instance.PlayerControlsOverlay.ForwardButtonTrigger.triggers.Add(fwd);
-        PlayerManager.Instance.PlayerControlsOverlay.ForwardButtonTrigger.triggers.Add(fwdUp);
-
-        PlayerManager.Instance.PlayerControlsOverlay.BackwardButtonTrigger.triggers.Add(bkwd);
-        PlayerManager.Instance.PlayerControlsOverlay.BackwardButtonTrigger.triggers.Add(bkwdUp);
-
-        PlayerManager.Instance.PlayerControlsOverlay.LeftButtonTrigger.triggers.Add(left);
-        PlayerManager.Instance.PlayerControlsOverlay.LeftButtonTrigger.triggers.Add(leftUp);
-
-        PlayerManager.Instance.PlayerControlsOverlay.RightButtonTrigger.triggers.Add(right);
-        PlayerManager.Instance.PlayerControlsOverlay.RightButtonTrigger.triggers.Add(rightUp);
+        UIPlayerController.Instance.MoveVerticalKeysUp += this.OnVerticalKeysNotPressed;
+        UIPlayerController.Instance.MoveHorizontalKeysUp += this.OnHorizontalKeysNotPressed;
     }
 	
+    private void OnDestroy()
+    {
+        UIPlayerController.Instance.MoveForward -= this.OnForwardPressed;
+        UIPlayerController.Instance.MoveBackward -= this.OnBackwardPressed;
+        UIPlayerController.Instance.MoveRight -= this.OnRightPressed;
+        UIPlayerController.Instance.MoveLeft -= this.OnLeftPressed;
+
+        UIPlayerController.Instance.MoveVerticalKeysUp -= this.OnVerticalKeysNotPressed;
+        UIPlayerController.Instance.MoveHorizontalKeysUp -= this.OnHorizontalKeysNotPressed;
+    }
+
 	// Update is called once per frame
 	private void Update ()
     {
@@ -103,32 +78,32 @@ public class Movement : MonoBehaviour
     #endregion
 
     #region Player Controller Unity Events
-    private void OnForwardPressed(PointerEventData data)
+    private void OnForwardPressed()
     {
         this.verticalAxisValue = 1;
     }
 
-    private void OnBackwardPressed(PointerEventData data)
+    private void OnBackwardPressed()
     {
         this.verticalAxisValue = -1;
     }
     
-    private void OnLeftPressed(PointerEventData data)
+    private void OnLeftPressed()
     {
         this.horizontalAxisValue = -1;
     }
 
-    private void OnRightPressed(PointerEventData data)
+    private void OnRightPressed()
     {
         this.horizontalAxisValue = 1;
     }
 
-    private void OnVerticalKeysNotPressed(PointerEventData data)
+    private void OnVerticalKeysNotPressed()
     {
         this.verticalAxisValue = 0;
     }
 
-    private void OnHorizontalKeysNotPressed(PointerEventData data)
+    private void OnHorizontalKeysNotPressed()
     {
         this.horizontalAxisValue = 0;
     }
