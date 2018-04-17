@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class UIPlayerController : MonoBehaviour
 {
+
     #region fields and properties
-   
     [SerializeField]
     private EventTrigger FlipButtonTrigger;
     [SerializeField]
@@ -28,17 +28,19 @@ public class UIPlayerController : MonoBehaviour
     public event Action MoveHorizontalKeysUp;
     #endregion
 
-
-    public void Setup()
+    #region singleton implementation
+    private static UIPlayerController instance;
+    public static UIPlayerController Instance
     {
-     
+        get { return instance; }
     }
+    #endregion
 
     #region Mono
 
     private void Awake()
     {
-        
+        instance = this.GetComponent<UIPlayerController>();
     }
 
     private void Update()

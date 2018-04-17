@@ -28,8 +28,6 @@ public class Movement : MonoBehaviour
     private float horizontalAxisValue;
     private float verticalAxisValue;
 
-    private UIPlayerController playerControllerOverlay;
-
     private CharacterController playerCont;
 
     private Vector3 playerDirection;
@@ -46,21 +44,28 @@ public class Movement : MonoBehaviour
     {
         playerCont = GetComponent<CharacterController>();
         playerCont.detectCollisions = false;
-
-        playerControllerOverlay = FindObjectOfType<UIPlayerController>();
     }
 
     private void Start ()
     {
-        playerControllerOverlay.MoveForward += this.OnForwardPressed;
+        UIPlayerController.Instance.MoveForward += this.OnForwardPressed;
+        UIPlayerController.Instance.MoveBackward += this.OnBackwardPressed;
+        UIPlayerController.Instance.MoveRight += this.OnRightPressed;
+        UIPlayerController.Instance.MoveLeft += this.OnLeftPressed;
 
-        this.playerControllerOverlay.MoveVerticalKeysUp += this.OnVerticalKeysNotPressed;
-        
+        UIPlayerController.Instance.MoveVerticalKeysUp += this.OnVerticalKeysNotPressed;
+        UIPlayerController.Instance.MoveHorizontalKeysUp += this.OnHorizontalKeysNotPressed;
     }
 	
     private void OnDestroy()
     {
-        this.playerControllerOverlay.MoveForward -= this.OnForwardPressed;
+        UIPlayerController.Instance.MoveForward -= this.OnForwardPressed;
+        UIPlayerController.Instance.MoveBackward -= this.OnBackwardPressed;
+        UIPlayerController.Instance.MoveRight -= this.OnRightPressed;
+        UIPlayerController.Instance.MoveLeft -= this.OnLeftPressed;
+
+        UIPlayerController.Instance.MoveVerticalKeysUp -= this.OnVerticalKeysNotPressed;
+        UIPlayerController.Instance.MoveHorizontalKeysUp -= this.OnHorizontalKeysNotPressed;
     }
 
 	// Update is called once per frame
