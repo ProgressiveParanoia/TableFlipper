@@ -28,6 +28,9 @@ public class Movement : MonoBehaviour
     private float horizontalAxisValue;
     private float verticalAxisValue;
 
+    private float rotateXValue;
+    private float rotateYValue;
+
     private CharacterController playerCont;
 
     private Vector3 playerDirection;
@@ -48,6 +51,7 @@ public class Movement : MonoBehaviour
 
     private void Start ()
     {
+        UIPlayerController.Instance.RotateCamera += this.OnRotateCamera;
         UIPlayerController.Instance.MoveForward += this.OnForwardPressed;
         UIPlayerController.Instance.MoveBackward += this.OnBackwardPressed;
         UIPlayerController.Instance.MoveRight += this.OnRightPressed;
@@ -59,6 +63,7 @@ public class Movement : MonoBehaviour
 	
     private void OnDestroy()
     {
+        UIPlayerController.Instance.RotateCamera -= this.OnRotateCamera;
         UIPlayerController.Instance.MoveForward -= this.OnForwardPressed;
         UIPlayerController.Instance.MoveBackward -= this.OnBackwardPressed;
         UIPlayerController.Instance.MoveRight -= this.OnRightPressed;
@@ -108,6 +113,11 @@ public class Movement : MonoBehaviour
         this.horizontalAxisValue = 0;
     }
 
+    private void OnRotateCamera(float x, float y)
+    {
+        this.rotateXValue = x;
+        this.rotateYValue = y;
+    }
     #endregion
 
     //TODO: ADD PROPER EVENT-DRIVEN INPUTS. TRY NOT TO RELY ON UPDATE SO MUCH.
@@ -151,9 +161,14 @@ public class Movement : MonoBehaviour
     {
         #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         playerRotX += Input.GetAxis("Mouse Y") * 1f;
-        
         playerRotY += Input.GetAxis("Mouse X") * 1f;
         #endif
+
+        #if UNITY_ANDROID
+        playerRotX += rotateYValue * 1f;
+        playerRotY += rotateXValue * 1f;
+        #endif
+
         playerRotX = Mathf.Clamp(playerRotX, -80, 80);
 
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, playerRotY, transform.localEulerAngles.z);
