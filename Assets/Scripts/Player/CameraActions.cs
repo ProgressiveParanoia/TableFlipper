@@ -41,7 +41,7 @@ public class CameraActions : MonoBehaviour {
    
     void Update ()
     {
-        this.CheckFront();
+        this.RayCastObjects();
     }
 
     #endregion
@@ -88,43 +88,4 @@ public class CameraActions : MonoBehaviour {
         }
 
     }
-
-    //private IEnumerator HighlightTable()
-    //{
-    //    if(this.activeTable != null)
-    //    {
-    //        foreach (Transform renderer in this.activeTable.GetComponentInChildren<Transform>())
-    //        {
-    //            renderer.GetComponent<MeshRenderer>().material = highlightMat;
-    //            yield return null;
-    //        }
-
-    //        this.setHighlightCoroutine = null;
-    //    }
-    //}
-
-    //private IEnumerator SetDefault()
-    //{
-    //    if (this.activeTable != null)
-    //    {
-    //        foreach (Transform renderer in this.activeTable.GetComponentInChildren<Transform>())
-    //        {
-    //            renderer.GetComponent<MeshRenderer>().material = defaultMat;
-    //            yield return null;
-    //        }
-    //        this.activeTable = null;
-    //        this.setDefaultHighlightCoroutine = null;
-    //    }
-    //}
-
-    //private void CheckActiveTable()
-    //{
-    //    foreach (GameObject table in tables)
-    //    {
-    //        if (activeTable == table)
-    //            table.GetComponent<MeshRenderer>().material = highlightMat;
-    //        if(activeTable != table)
-    //            table.GetComponent<MeshRenderer>().material = defaultMat;
-    //    }
-    //}
 }
