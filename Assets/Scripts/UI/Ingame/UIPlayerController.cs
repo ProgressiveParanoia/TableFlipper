@@ -10,11 +10,11 @@ public class UIPlayerController : MonoBehaviour
 
     #region fields and properties
     [SerializeField]
-    private RectTransform rotationalContainer;
+    private RectTransform rotationalLookContainer;
     [SerializeField]
-    private RectTransform rotationalButtonTransform;
+    private RectTransform rotationalLookButtonTransform;
     [SerializeField]
-    private EventTrigger rotationalControllerTrigger;
+    private EventTrigger rotationalLookControllerTrigger;
     [SerializeField]
     private EventTrigger FlipButtonTrigger;
     [SerializeField]
@@ -52,7 +52,7 @@ public class UIPlayerController : MonoBehaviour
 
     private void Awake()
     {
-        Debug.LogError("Rotational controller:"+rotationalContainer.rect.width);
+        Debug.LogError("Rotational controller:"+rotationalLookContainer.rect.width);
         instance = this.GetComponent<UIPlayerController>();
     }
 
@@ -70,11 +70,11 @@ public class UIPlayerController : MonoBehaviour
         draggingRotation.callback.AddListener((data) => { OnDragRotation(data as PointerEventData); });
         stopDrag.callback.AddListener((data) => { OnDragEnd(data as PointerEventData); });
 
-        this.rotationalControllerTrigger.triggers.Add(lookRotation);
-        this.rotationalControllerTrigger.triggers.Add(draggingRotation);
-        this.rotationalControllerTrigger.triggers.Add(stopDrag);
-
-        this.cameraControllerAxis = new Vector2(rotationalContainer.rect.width / 2, rotationalContainer.rect.height / 2);
+        this.rotationalLookControllerTrigger.triggers.Add(lookRotation);
+        this.rotationalLookControllerTrigger.triggers.Add(draggingRotation);
+        this.rotationalLookControllerTrigger.triggers.Add(stopDrag);
+        
+        this.cameraControllerAxis = new Vector2(rotationalLookContainer.rect.width / 2, rotationalLookContainer.rect.height / 2);
     }
 
     private void Update()
@@ -93,15 +93,14 @@ public class UIPlayerController : MonoBehaviour
     #region Event Callbacks
     public void OnRotatePlayer(PointerEventData pointerData)
     {
-        
-        Debug.LogError("curr object pos:"+rotationalContainer.position + " rect vector equivalent:"+rotationalButtonTransform.anchoredPosition + "its name:"+ rotationalButtonTransform.name);
+        Debug.LogError("curr object pos:"+rotationalLookContainer.position + " rect vector equivalent:"+rotationalLookButtonTransform.anchoredPosition + "its name:"+ rotationalLookButtonTransform.name);
         Debug.LogError("curr point pos:"+pointerData.position);
     }
 
     private void OnDragRotation(PointerEventData pointerData)
     {
-        float maxCameraContainerX = rotationalContainer.InverseTransformPoint(pointerData.position.x, pointerData.position.y, 0).x;
-        float maxCameraContainerY = rotationalContainer.InverseTransformPoint(pointerData.position.x, pointerData.position.y, 0).y;
+        float maxCameraContainerX = rotationalLookContainer.InverseTransformPoint(pointerData.position.x, pointerData.position.y, 0).x;
+        float maxCameraContainerY = rotationalLookContainer.InverseTransformPoint(pointerData.position.x, pointerData.position.y, 0).y;
 
         this.cameraControllerPosition.x = maxCameraContainerX;
         this.cameraControllerPosition.y = maxCameraContainerY;
@@ -111,8 +110,8 @@ public class UIPlayerController : MonoBehaviour
         float normalizedX = MathUtil.Normalize(cameraControllerPosition.x, this.cameraControllerAxis.x);
         float normalizedY = MathUtil.Normalize(cameraControllerPosition.y, this.cameraControllerAxis.y);
 
-        this.rotationalButtonTransform.anchoredPosition = this.cameraControllerPosition;
-       
+        this.rotationalLookButtonTransform.anchoredPosition = this.cameraControllerPosition;
+        Debug.LogError("do the thing");
         if(RotateCamera != null)
         {
             RotateCamera(normalizedX, normalizedY);
@@ -124,7 +123,7 @@ public class UIPlayerController : MonoBehaviour
         this.cameraControllerPosition.x = 0;
         this.cameraControllerPosition.y = 0;
 
-        this.rotationalButtonTransform.anchoredPosition = this.cameraControllerPosition;
+        this.rotationalLookButtonTransform.anchoredPosition = this.cameraControllerPosition;
 
         if(RotateCamera != null)
         {
