@@ -69,15 +69,20 @@ public class CameraActions : MonoBehaviour {
     {
         RaycastHit tableRay;
 
-        Debug.DrawRay(transform.position,transform.forward,Color.red);
+        Debug.DrawRay(transform.position, transform.forward, Color.red);
         if (Physics.Raycast(transform.position, transform.forward, out tableRay, tableRayDistance))
         {
             TableBehaviour table = tableRay.collider.GetComponent<TableBehaviour>() != null ? tableRay.collider.GetComponent<TableBehaviour>() : null;
 
-            if(table == null)
+            if (table == null)
             {
                 tableManager.ClearActiveTable();
                 return;
+            }
+
+            if(this.tableManager.ActiveTable != table)
+            {
+                tableManager.ClearActiveTable();
             }
 
             tableManager.SetActiveTable(table);
